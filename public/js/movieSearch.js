@@ -80,32 +80,39 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }; 
     
     var printAllMovies = function(arrayOfMovies) {
-        var movieList = document.createElement("UL");        // Create a <ul> element to list movies
-        for (var i = 0; i < arrayOfMovies.length; i++) {
-            var movieTitle = arrayOfMovies[i].Title;
-            // Create a bullet node for each movie in the list
-            var movie = document.createElement("LI");
-            //Append favorite button for each movie
-            var favoriteButton = document.createElement("BUTTON");
-            favoriteButton.setAttribute("class", "star buttons formItems");
-            favoriteButton.innerHTML = "Add to Favorites";
-            movie.appendChild(favoriteButton);
-            //Append movie link for each movie
-            var movieLink = document.createElement("A");
-            movieLink.setAttribute('href', "#");
-            movieLink.innerHTML = movieTitle;
-            movie.appendChild(movieLink);
-            //Add Listeners to get movie details and add favorites
-            if(movieLink.addEventListener){
-                movieLink.addEventListener("click", getMovieDetails, false);  //For Modern Browsers
-                favoriteButton.addEventListener("click", addToFavorites, false);
-            }
-            else if(movieLink.attachEvent){
-                movieLink.attachEvent("onclick", getMovieDetails);            //For Old IE Compatibility
-                favoriteButton.attachEvent("onclick", addToFavorites);
-            }
-            movieList.appendChild(movie);                                // Append the movie to the list
+        var movieList = document.createElement("UL");   // Create a <ul> element to list movies
+        //Handle case where no movies match search criteria
+        if (arrayOfMovies[0].Title == "Movie not found!") {
+            movieList.innerHTML = "Movie not found!";
+        } 
+        else {
+            for (var i = 0; i < arrayOfMovies.length; i++) {
+                var movieTitle = arrayOfMovies[i].Title;
+                // Create a bullet node for each movie in the list
+                var movie = document.createElement("LI");
+                //Append favorite button for each movie
+                var favoriteButton = document.createElement("BUTTON");
+                favoriteButton.setAttribute("class", "star buttons formItems");
+                favoriteButton.innerHTML = "Add to Favorites";
+                movie.appendChild(favoriteButton);
+                //Append movie link for each movie
+                var movieLink = document.createElement("A");
+                movieLink.setAttribute('href', "#");
+                movieLink.innerHTML = movieTitle;
+                movie.appendChild(movieLink);
+                //Add Listeners to get movie details and add favorites
+                if(movieLink.addEventListener){
+                    movieLink.addEventListener("click", getMovieDetails, false);  //For Modern Browsers
+                    favoriteButton.addEventListener("click", addToFavorites, false);
+                }
+                else if(movieLink.attachEvent){
+                    movieLink.attachEvent("onclick", getMovieDetails);            //For Old IE Compatibility
+                    favoriteButton.attachEvent("onclick", addToFavorites);
+                }
+                movieList.appendChild(movie);                                // Append the movie to the list
+            }            
         }
+
         var movieDisplay = document.getElementById('movieDisplay');
         if (movieDisplay.firstChild) {
             movieDisplay.replaceChild(movieList, movieDisplay.firstChild); //Replace any existing movie list
